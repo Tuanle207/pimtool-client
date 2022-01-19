@@ -4,10 +4,13 @@ import { ProjectEditorComponent } from './project-editor.component';
 
 const routes: Routes = [
   {
-    path: "new", component: ProjectEditorComponent,
+    path: '', redirectTo: 'new', pathMatch: 'full'
   },
   {
-    path: ":id", component: ProjectEditorComponent,
+    path: 'new', component: ProjectEditorComponent,
+  },
+  {
+    path: ':id', component: ProjectEditorComponent,
   }
 ];
 

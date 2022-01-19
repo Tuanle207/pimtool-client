@@ -5,7 +5,7 @@ import { ProjectManagementComponent } from './project-management.component';
 
 const routes: Routes = [
   {
-    path: "", component: ProjectManagementComponent,
+    path: '', component: ProjectManagementComponent,
   },
 ];
 

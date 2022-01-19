@@ -1,7 +1,9 @@
-<div style="height: 100vh;">
+<div class="d-flex flex-column" style="height: 100vh;">
   <app-header></app-header>
-  <div class="d-flex">
+  <div class="d-flex flex-row flex-grow-1">
     <app-sidebar></app-sidebar>
+  <div class="d-flex flex-column flex-grow-1 bg-light">
     <router-outlet></router-outlet>
+  </div>
   </div>
 </div>

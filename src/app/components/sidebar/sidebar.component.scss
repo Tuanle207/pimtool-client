@@ -1,0 +1,26 @@
+.sidebar {
+    width: 200px;
+    padding-top: 32px;
+
+    @media (max-width: 768px) {
+        width: 140px;
+    }
+}
+
+li {
+    margin-left: 32px;
+    font-weight: 500;
+
+    @media (max-width: 768px) {
+        margin-left: 0;
+    }
+}
+
+li:first-child {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+li:nth-child(2) {
+    font-size: 18px;
+}

@@ -1,0 +1,22 @@
+nav > * {
+    user-select: none;
+}
+
+.title {
+    margin-left: 32px;
+    cursor: pointer;
+
+    & > img {
+        width: 48px;
+    }
+
+    @media (max-width: 768px) {
+        margin-left: 0;
+    }
+}
+
+.vertical-divider {
+    margin: 10px 0;
+    width: 1px;
+    background-color: #000;
+}

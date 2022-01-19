@@ -1,1 +1,30 @@
-<p>sidebar works!</p>
+<nav id="sidebar" class="h-100 bg-light border-right sidebar">
+    <ul class="list-unstyled components">
+        <li>
+            <a 
+                class="nav-link" 
+                [routerLink]="['projects']"
+                routerLinkActive="text-dark"             
+            >Projects list</a>
+        </li>
+        <li>
+            <a 
+                class="nav-link" 
+                [routerLink]="['project-editor']"
+            >New</a>
+        </li>
+        <li>
+            <a
+                class="nav-link" 
+                [routerLink]="['project-editor']"
+                routerLinkActive="text-dark"   
+            >Project</a>
+        </li>
+        <li>
+            <a class="nav-link disabled">Customer</a>
+        </li>
+        <li>
+            <a class="nav-link disabled">Supplier</a>
+        </li>
+    </ul>
+</nav>
