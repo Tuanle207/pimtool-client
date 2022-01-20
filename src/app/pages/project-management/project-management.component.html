@@ -3,12 +3,13 @@
         <h3 class="text-secondary">Projects List</h3>
     </div>
     <div class="d-flex flex-column">
-        <form class="row p-4">
+        <form class="row p-4" [formGroup]="formGroup" (ngSubmit)="onSearch()">
             <div class="col-5">
                 <input 
                     type="text"
                     class="form-control"
                     placeholder="Project number, name, customer name"
+                    formControlName="query"
                 >
             </div>
             <div class="col-3">
@@ -17,11 +18,11 @@
                     class="custom-select flex-grow-1" 
                     formControlName="status"
                 >
-                    <option hidden selected value="0">Project status</option>
-                    <option value="1">New</option>
-                    <option value="3">Planned</option>
-                    <option value="3">In Progress</option>
-                    <option value="2">Finished</option>
+                    <option
+                        [hidden]="status === ProjectStatus.Unknown"
+                        *ngFor="let status of StatusOptions; let i = index"
+                        [value]="status"
+                    >{{ ProjectStatusDic[status] }}</option>
                 </select>
             </div>
             <button
@@ -32,9 +33,11 @@
             <button
                 type="button"
                 class="btn btn-link"
+                (click)="onReset()"
             >Reset Search</button>
         </form>
         <div class="pl-4 pt-4 pb-4">
+            
             <table class="table table-borderless bg-white">
                 <thead>
                     <tr>
@@ -48,21 +51,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of items | paginate: paginationConfig">
+                    <tr *ngFor="let item of items | paginate: paginationConfig" (click)="onSelectionChange(item)">
                         <th scope="row" style="width: 40px;">
                             <input
                                 type="checkbox"
+                                [checked]="getIsChecked(item.id)"
                             >
                         </th>
-                        <td style="width: 80px;">1234</td>
-                        <td style="width: 300px;">Otto</td>
-                        <td style="width: 150px;">@mdo</td>
-                        <td style="width: 150px;">MGB Tourism</td>
-                        <td style="width: 120px;">25.02.2002</td>
+                        <td style="width: 80px;">
+                            <button
+                                type="button"
+                                class="btn btn-link"
+                                (click)="onStartEdit(item.id)"
+                            >
+                            {{ item.number }}
+                            </button>
+                        </td>
+                        <td style="width: 300px;">{{ item.name }}</td>
+                        <td style="width: 150px;">{{ ProjectStatusDic[item.status] }}</td>
+                        <td style="width: 150px;">{{ item.customer }}</td>
+                        <td style="width: 120px;">{{ item.startDate | date: 'dd.MM.YYYY' }}</td>
                         <td>
                             <button 
                                 type="button"
                                 class="btn ml-2"
+                                (click)="onConfirmDelete(confirmBeforeDeleteContent, [ item ])"
                             >
                                 <img src="/assets/trash.svg" />
                             </button>
@@ -71,13 +84,14 @@
                     <tr>
                         <td colspan="7">
                             <div class="row pl-4 pr-4">
-                                 <p class="text-primary mr-auto mt-auto mb-auto">2 items selected</p>
+                                 <p class="text-primary mr-auto mt-auto mb-auto">{{ selectedItems.length }} items selected</p>
                                  <button
                                      type="button"
                                      class="btn delete-selection-btn"
+                                     (click)="onConfirmDelete(confirmBeforeDeleteContent, selectedItems)"
                                  >
-                                     <span class="text-danger mr-2">delete selected items</span>
-                                     <img src="/assets/trash.svg" />
+                                    <span class="text-danger mr-2">delete selected items</span>
+                                    <img src="/assets/trash.svg" />
                                  </button>
                             </div>
                         </td> 
@@ -86,16 +100,20 @@
             </table>
             <pagination-template #p="paginationApi"
                 [id]="paginationConfig.id!"
-                (pageChange)="paginationConfig.currentPage = $event">
-
-                <div class="pt-2 custom-pagination">
-                    <nav aria-label="Project navifation">
+                (pageChange)="onPageChange($event)">
+                
+                <div class="pt-2 d-flex">
+                    <div *ngIf="loading" class="d-flex flex-row ml-auto">
+                        <div class="spinner-border" role="status"></div>
+                        <p class="ml-2 mt-1">Loading data...</p>
+                    </div>
+                    <nav aria-label="Project navifation" class="ml-auto disable-user-select">
                         <ul class="pagination justify-content-center">
                             <li class="page-item">
                                 <a 
                                     class="page-link"
                                     [ngClass]="{'text-secondary': p.isFirstPage()}"
-                                    (click)="!p.isFirstPage() && p.previous()"
+                                    (click)="!loading && !p.isFirstPage() && p.previous()"
                                 >Previous</a>
                             </li>
         
@@ -107,7 +125,7 @@
                                 <a
                                     *ngIf="p.getCurrent() !== page.value"
                                     class="page-link"
-                                    (click)="p.setCurrent(page.value)"
+                                    (click)="!loading && p.setCurrent(page.value)"
                                 >{{ page.label }}</a>
                                 <a
                                     *ngIf="p.getCurrent() === page.value"
@@ -119,26 +137,29 @@
                                 <a 
                                     class="page-link"
                                     [ngClass]="{'text-secondary': p.isLastPage()}"
-                                    (click)="!p.isLastPage() && p.next()"
+                                    (click)="!loading && !p.isLastPage() && p.next()"
                                 >Next</a>
                             </li>
-
                         </ul>
                     </nav>
-
-                    <!-- <div *ngFor="let page of p.pages" [class.current]="p.getCurrent() === page.value">
-                        <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
-                    <span   span>{{ page.label }}</span>
-                    </a>
-                    <div *ngIf="p.getCurrent() === page.value">
-                    <span>{{ page.label }}</span>
-                    </div>
-                    </div> -->
-                    
                 </div>
-
             </pagination-template>
-
         </div>
     </div>
 </div>
+
+<ng-template #confirmBeforeDeleteContent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">Confirmation before continue!</h4>
+        <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <div class="modal-body">
+        <p>Are you sure you want to delete selected items?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="modal.close()">Ok</button>
+    </div>
+</ng-template>

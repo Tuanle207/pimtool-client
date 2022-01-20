@@ -1,5 +1,5 @@
 export const ProjectStatusList = [
-    'NEW', 'PLAN', 'INP', 'FIN'
+    'NEW', 'PLAN', 'INP', 'FIN', 'UNK',
 ];
 
 export const ProjectStatus = {
@@ -7,11 +7,13 @@ export const ProjectStatus = {
     Planned: 'PLA',
     InProgress: 'INP',
     Finished: 'FIN',
+    Unknown: 'UNK'
 }
 
-export const ProjectStatusDictionary = {
+export const ProjectStatusDictionary: {[key:string]: string} = {
     'NEW': 'New',
     'PLAN': 'Planned',
     'INP': 'In Progress',
     'FIN': 'Finished',
+    'UNK': 'Status',
 }

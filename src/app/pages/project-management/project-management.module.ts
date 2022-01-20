@@ -4,6 +4,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 import { ProjectManagementComponent } from './project-management.component';
 import { ProjectManagementRoutingModule } from './project-management-routing.module';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,6 +15,8 @@ import { ProjectManagementRoutingModule } from './project-management-routing.mod
   imports: [
     ProjectManagementRoutingModule,
     NgxPaginationModule,
+    ReactiveFormsModule,
+    SharedModule,
     CommonModule,
   ]
 })

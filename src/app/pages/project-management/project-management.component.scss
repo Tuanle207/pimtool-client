@@ -22,6 +22,10 @@ table {
         border: 1px solid #dee2e6;
     }
 
+    th {
+        border-left: 1px solid #dee2e6;
+    }
+
     tbody {
         & > tr:last-child {
             border-top: 1px solid #dee2e6;
@@ -46,13 +50,14 @@ table {
         & > tr:not(:last-child):hover {
             background-color: rgba(#0069D9, 0.4);
         }
+
+        th {
+            text-align: center;
+        }
     }
     
 
-    th {
-        border-left: 1px solid #dee2e6;
-        text-align: center;
-    }
+   
 
     td {
         border-left: 1px solid #dee2e6;
@@ -72,8 +77,6 @@ table {
     }
 }
 
-.custom-pagination {
-    display: flex;
-    justify-content: flex-end;
+.disable-user-select {
     user-select: none;
 }
