@@ -1,0 +1,79 @@
+#page {
+    height: 100%;
+    min-height: 100%;
+    padding-right: 400px!important;
+
+    @media (max-width: 1600px) {
+        padding-right: 200px!important;
+    }
+    
+    @media (max-width: 1366px) {
+        padding-right: 100px!important;
+    }
+
+    @media (max-width: 1100px) {
+        padding-right: 25px!important;
+    }
+}
+
+table {
+
+    thead {
+        border: 1px solid #dee2e6;
+    }
+
+    tbody {
+        & > tr:last-child {
+            border-top: 1px solid #dee2e6;
+            border-bottom: 1px solid #dee2e6;
+            background-color: #EBF3FB;
+            font-weight: 500;
+        }
+
+        & > tr > td:last-child {
+            width: 40px; 
+            text-align: right;
+
+            & > button {
+                transform: translateX(-50%);
+
+                @media (max-width: 1600px) {
+                    transform: translateX(calc(-50% + 12px));
+                }
+            }
+        }
+
+        & > tr:not(:last-child):hover {
+            background-color: rgba(#0069D9, 0.4);
+        }
+    }
+    
+
+    th {
+        border-left: 1px solid #dee2e6;
+        text-align: center;
+    }
+
+    td {
+        border-left: 1px solid #dee2e6;
+        border-right: 1px solid #dee2e6;
+        padding: 4px 8px;
+        padding-left: 12px;
+        vertical-align: middle;
+    }
+}
+
+.delete-selection-btn {
+    margin-right: 13px;
+    font-weight: inherit;
+    
+    @media (max-width: 1600px) {
+        margin-right: 1px;
+    }
+}
+
+.custom-pagination {
+    display: flex;
+    justify-content: flex-end;
+    user-select: none;
+}
