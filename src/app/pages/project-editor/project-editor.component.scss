@@ -28,3 +28,13 @@ button {
     content: " *";
     color: red;
 }
+
+form {
+    select.ng-invalid.ng-touched,
+    input.ng-invalid.ng-touched {
+        border: 1px solid red;
+        &:focus {
+            box-shadow: 0 0 0 0.2rem rgba(red, 0.1);
+        }
+    }
+}

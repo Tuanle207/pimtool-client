@@ -2,7 +2,7 @@
     <div class="p-2 border-bottom">
         <h3 class="text-secondary">New Project</h3>
     </div>
-    <form class="border-bottom p-5" [formGroup]="formGroup">
+    <form class="p-5" [formGroup]="formGroup" (ngSubmit)="onSubmitEdit()" *ngIf="!!formGroup">
         <div class="form-group row pb-4">
             <label
                 class="col-sm-2 col-form-label required-label"
@@ -15,6 +15,20 @@
                     class="form-control"
                     formControlName="number"
                 >
+            </div>
+            <div class="col-sm-6">
+                <p
+                    *ngIf="formControls.number.touched && formControls.number.errors?.['required']"
+                    class="text-danger"
+                >
+                    A project number is required!
+                </p>
+                <p
+                    *ngIf="formControls.number.touched && formControls.number.errors?.['invalid']"
+                    class="text-danger"
+                >
+                Project number must have exactly 4 numeric characters, the first one must not be 0
+                </p>
             </div>
             
         </div>
@@ -31,7 +45,14 @@
                     formControlName="name"
                 >
             </div>
-            
+            <div class="col-sm-12 pt-2 d-flex justify-content-end">
+                <p
+                    *ngIf="formControls.name.touched && formControls.name.errors?.['required']"
+                    class="text-danger col-10"
+                >
+                    A project name is required!
+                </p>
+            </div>
         </div>
         <div class="form-group row pb-4">
             <label
@@ -46,6 +67,14 @@
                     formControlName="customer"
                 >
             </div>
+            <div class="col-sm-12 pt-2 d-flex justify-content-end">
+                <p
+                    *ngIf="formControls.customer.touched && formControls.customer.errors?.['required']"
+                    class="text-danger col-10"
+                >
+                    A project customer is required!
+                </p>
+            </div>
         </div>
         <div class="form-group row pb-4">
             <label
@@ -58,13 +87,19 @@
                     class="custom-select" 
                     formControlName="group"
                 >
-                    <option hidden selected value="-1">Please select group id</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    <option *ngFor="let groupId of groupIdOptions" value="groupId" [hidden]="groupId === -1">
+                        {{ groupId === -1 ? 'Please select a group id' : groupId }}
+                    </option>
                 </select>
             </div>
-                
+            <div class="col-sm-6">
+                <p
+                    *ngIf="formControls.group.touched && formControls.group.errors?.['required']"
+                    class="text-danger"
+                >
+                    A Group Id is required!
+                </p>
+            </div>
         </div>
         <div class="form-group row pb-4">
             <label
@@ -79,7 +114,20 @@
                     formControlName="members"
                 >
             </div>
-            
+            <div class="col-sm-12 pt-2 d-flex justify-content-end">
+                <p
+                    *ngIf="formControls.members.touched && formControls.members.errors?.['invalid']"
+                    class="text-danger col-10"
+                >
+                    Each visa must have exactly 3 characters, must be separated by comma
+                </p>
+                <p
+                    *ngIf="formControls.members.touched && formControls.members.errors?.['unique']"
+                    class="text-danger col-10"
+                >
+                    Each visa must be unique
+                </p>
+            </div>
         </div>
         <div class="form-group row pb-4">
             <label
@@ -92,14 +140,16 @@
                     class="custom-select flex-grow-1" 
                     formControlName="status"
                 >
-                    <option value="1" selected>New</option>
-                    <option value="3">Planned</option>
-                    <option value="3">In Progress</option>
-                    <option value="2">Finished</option>
+                  
+                    <option
+                        [hidden]="status === ProjectStatus.Unknown"
+                        *ngFor="let status of StatusOptions; let i = index"
+                        [value]="status"
+                    >{{ ProjectStatusDic[status] }}</option>
                 </select>
             </div>
         </div>
-        <div class="form-group row pb-4">
+        <div class="form-group row">
             <label
                 class="col-form-label col-sm-2 required-label"
                 for="project-start-date"
@@ -124,17 +174,40 @@
                     formControlName="endDate"
                 >
             </div>
-                
+        </div>
+        <div class="form-group row pb-4">
+            <div class="col-sm-6 pt-2 d-flex justify-content-end">
+                <p
+                    *ngIf="formControls.startDate.touched && formControls.startDate.errors?.['required']"
+                    class="text-danger col-10"
+                >
+                    A start date is required
+                </p>
+                <p
+                    *ngIf="formControls.startDate.touched && formControls.startDate.errors?.['range']"
+                    class="text-danger col-10"
+                >
+                    Start year must be later than 1999 and earlier than 2031
+                </p>
+            </div>
+            <div class="col-sm-6 pt-2 d-flex justify-content-end">
+                <p
+                    *ngIf="formControls.endDate.touched && formControls.endDate.errors?.['range']"
+                    class="text-danger col-10"
+                >
+                    End year must be later than 1999 and earlier than 2031
+                </p>
+            </div>
+        </div>
+        <div id="action-button-group" class="d-flex flex-row justify-content-end p-4 pr-5 pt-5 border-top">
+            <button
+                type="button"
+                class="btn btn-outline-secondary"
+            >Cancel</button>
+            <button
+                type="submit"
+                class="btn btn-primary ml-5"
+            >Create Project</button>
         </div>
     </form>
-    <div id="action-button-group" class="d-flex flex-row justify-content-end p-4 pr-5">
-        <button
-            type="button"
-            class="btn btn-outline-secondary"
-        >Cancel</button>
-        <button
-            type="submit"
-            class="btn btn-primary ml-5"
-        >Create Project</button>
-    </div>
 </div>

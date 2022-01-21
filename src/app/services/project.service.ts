@@ -1,8 +1,9 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { delay, Observable, Subject } from "rxjs";
+import { delay, Subject } from "rxjs";
 import { PaginationModel } from "src/app/shared/models/pagination.model";
-import { DeleteProjectsBody, Project, ProjectFilter } from "../pages/project-management/models/project.model";
+import { BasicGroup, NewProject } from "./project.model";
+import { DeleteProjectsBody, Project, ProjectFilter } from "../services/project.model";
 import { ApiLoadState, LoadingState } from "../shared/models/api-load-state.model";
 import { Object } from "../shared/models/object.model";
 
@@ -14,6 +15,7 @@ export class ProjectService {
         pageIndex: 1,
         pageSize: 1,
     }
+    private groupIds: number[] = [];
     private projectsData: PaginationModel<Project> = {
         pageIndex: 1,
         pageSize: 0,
@@ -45,6 +47,27 @@ export class ProjectService {
         });
     }
 
+    fetchGroups() {
+        this.notifyLoadingState('loading');
+        this.httpClient.get<PaginationModel<BasicGroup>>('/api/groups').subscribe({
+            next: (data) => {
+                this.groupIds = data.items.map(x => x.id);
+                this.notifyLoadingState('success', 'FetchGroups');
+            },
+            error: (error: any) => this.handleError(error),
+        });
+    }
+
+    createProject(newProject: NewProject) {
+        this.notifyLoadingState('loading');
+        this.httpClient.post('/api/projects', newProject).pipe(delay(400)).subscribe({
+            next: (data) => {
+                this.notifyLoadingState('success', 'CreateProject');
+            },
+            error: (error: any) => this.handleError(error),
+        });
+    }
+
     deleteProject(listId: number[]) {
         const items = this.projectsData.items;
         const body: DeleteProjectsBody = {
@@ -68,6 +91,10 @@ export class ProjectService {
             ...this.projectsData,
             items: this.projectsData.items.slice()
         }
+    }
+    
+    getGroupStorage(): number[] {
+        return this.groupIds.slice();
     }
 
     getProjectForUpdation(projectId: number) {

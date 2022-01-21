@@ -18,11 +18,11 @@
                     class="custom-select flex-grow-1" 
                     formControlName="status"
                 >
-                    <option
-                        [hidden]="status === ProjectStatus.Unknown"
-                        *ngFor="let status of StatusOptions; let i = index"
-                        [value]="status"
-                    >{{ ProjectStatusDic[status] }}</option>
+                        <option
+                            [hidden]="status === ProjectStatus.Unknown"
+                            *ngFor="let status of StatusOptions; let i = index"
+                            [value]="status"
+                        >{{ ProjectStatusDic[status] }}</option>
                 </select>
             </div>
             <button

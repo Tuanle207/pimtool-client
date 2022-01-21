@@ -1,5 +1,21 @@
 import { PaginationFilter } from "src/app/shared/models/pagination.model";
 
+export interface NewProject {
+    projectNumber: number;
+    name: string;
+    customer: string;
+    groupId: number;
+    employees: string;
+    status: string;
+    startDate: Date;
+    endDate?: Date;
+}
+
+export interface BasicGroup {
+    id: number;
+}
+
+
 export interface ProjectFilter extends PaginationFilter {
     name?: string;
     number?: number;

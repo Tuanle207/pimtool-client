@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginationInstance } from 'ngx-pagination';
 import { ProjectStatus, ProjectStatusDictionary, ProjectStatusList } from 'src/app/constants/project-status';
+import { Project } from 'src/app/services/project.model';
 import { ProjectService } from 'src/app/services/project.service';
-import { Project } from './models/project.model';
 
 interface ProjectFormControlsTemplate {
   query: FormControl;
@@ -136,7 +136,7 @@ export class ProjectManagementComponent implements OnInit {
     const query = this.formControls.query.value;
     const status = this.formControls.status.value;
     this.projectService.setProjectFilter({
-      number: query,
+      number: isNaN(query) ? 0 : query,
       name: query,
       customer: query,
       status: status !== ProjectStatus.Unknown ? status : undefined,
